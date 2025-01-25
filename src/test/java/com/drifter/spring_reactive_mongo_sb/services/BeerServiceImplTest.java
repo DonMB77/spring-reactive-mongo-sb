@@ -57,6 +57,14 @@ class BeerServiceImplTest {
     }
 
     @Test
+    @DisplayName("Test save beer using block")
+    void testSaveBeerUsingBlock() {
+        BeerDTO savedDto = beerService.saveBeer(Mono.just(getTestBeerDto())).block();
+        assertThat(savedDto).isNotNull();
+        assertThat(savedDto.getId()).isNotNull();
+    }
+
+    @Test
     void saveBeer() throws InterruptedException {
 
         AtomicBoolean atomicBoolean = new AtomicBoolean(false);
@@ -69,6 +77,55 @@ class BeerServiceImplTest {
         });
 
         await().untilTrue(atomicBoolean);
+    }
+
+    @Test
+    @DisplayName("Test Update Beer Using Block")
+    void testUpdateBlocking() {
+        final String newName = "New Beer Name";  // use final so cannot mutate
+        BeerDTO savedBeerDto = getSavedBeerDto();
+        savedBeerDto.setBeerName(newName);
+
+        BeerDTO updatedDto = beerService.saveBeer(Mono.just(savedBeerDto)).block();
+
+        //verify exists in db
+        BeerDTO fetchedDto = beerService.getById(updatedDto.getId()).block();
+        assertThat(fetchedDto.getBeerName()).isEqualTo(newName);
+    }
+
+    @Test
+    @DisplayName("Test update using reactive streams")
+    void testUpdateStreaming() {
+        final String newName = "New Beer Name";
+
+        AtomicReference<BeerDTO> atomicDtoRef = new AtomicReference<>();
+
+        beerService.saveBeer(Mono.just(getTestBeerDto()))
+                .map(savedBeerDto -> {
+                    savedBeerDto.setBeerName(newName);
+                    return savedBeerDto;
+                })
+                .flatMap(beerService::saveBeer) // save updated beer
+                .flatMap(savedUpdatedDto -> beerService.getById(savedUpdatedDto.getId()))
+                .subscribe(dtoFromDB -> {
+                    atomicDtoRef.set(dtoFromDB);
+                });
+
+        await().until(() -> atomicDtoRef.get() != null);
+        assertThat(atomicDtoRef.get().getBeerName()).isEqualTo(newName);
+    }
+
+    @Test
+    void testDeleteBeer() {
+        BeerDTO beerToBeDeleted = getSavedBeerDto();
+
+        beerService.deleteBeerById(beerToBeDeleted.getId()).block();
+
+        Mono<BeerDTO> expectedEmptyMono = beerService.getById(beerToBeDeleted.getId());
+
+        BeerDTO emptyBeer = expectedEmptyMono.block();
+
+        assertThat(emptyBeer).isNull();
     }
 
     public static Beer getTestBeer() {
