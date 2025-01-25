@@ -18,4 +18,7 @@ public interface BeerService {
     Mono<BeerDTO> updateBeer(String beerId, BeerDTO beerDTO);
 
     Mono<Void> deleteBeerById(String beerId);
+
+    Mono<BeerDTO> findFirstByBeerName(String beerName);
+
 }
