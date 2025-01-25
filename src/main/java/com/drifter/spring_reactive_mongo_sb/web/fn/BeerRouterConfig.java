@@ -14,7 +14,7 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @RequiredArgsConstructor
 public class BeerRouterConfig {
     public static final String BEER_PATH = "/api/v3/beer";
-    public static final String BEER_PATH_WITH_ID = BEER_PATH + "{beerId}";
+    public static final String BEER_PATH_WITH_ID = BEER_PATH + "/{beerId}";
 
     private final BeerHandler handler;
 
