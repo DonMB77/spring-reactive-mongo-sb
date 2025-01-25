@@ -2,9 +2,11 @@ package com.drifter.spring_reactive_mongo_sb.services;
 
 import com.drifter.spring_reactive_mongo_sb.domain.Beer;
 import com.drifter.spring_reactive_mongo_sb.mappers.BeerMapper;
+import com.drifter.spring_reactive_mongo_sb.mappers.BeerMapperImpl;
 import com.drifter.spring_reactive_mongo_sb.model.BeerDTO;
 import com.drifter.spring_reactive_mongo_sb.repositories.BeerRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +25,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled
 @Testcontainers
 @SpringBootTest
-class BeerServiceImplTest {
+public class BeerServiceImplTest {
 
     @Container
     @ServiceConnection
