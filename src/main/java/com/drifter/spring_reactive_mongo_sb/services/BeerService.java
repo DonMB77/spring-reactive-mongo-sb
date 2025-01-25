@@ -9,6 +9,8 @@ public interface BeerService {
 
     Mono<BeerDTO> saveBeer(Mono<BeerDTO> beerDTO);
 
+    Mono<BeerDTO> patchBeer(String beerId, BeerDTO beerDTO);
+
     Mono<BeerDTO> getById(String beerId);
 
     Flux<BeerDTO> listBeers();
