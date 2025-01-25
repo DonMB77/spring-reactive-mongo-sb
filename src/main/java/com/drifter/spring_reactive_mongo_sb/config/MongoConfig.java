@@ -26,7 +26,7 @@ public class MongoConfig extends AbstractReactiveMongoConfiguration {
 
     @Override
     protected void configureClientSettings(MongoClientSettings.Builder builder) {
-        builder.credential(MongoCredential.createCredential("adminDrifter771", "admin", "".toCharArray()))
+        builder.credential(MongoCredential.createCredential("admin", "admin", "admin".toCharArray()))
                 .applyToClusterSettings(settings -> {
                     settings.hosts(Collections.singletonList(
                             new ServerAddress("127.0.0.1", 27017)
