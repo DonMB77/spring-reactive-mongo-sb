@@ -2,6 +2,7 @@ package com.drifter.spring_reactive_mongo_sb.services;
 
 import com.drifter.spring_reactive_mongo_sb.domain.Beer;
 import com.drifter.spring_reactive_mongo_sb.mappers.BeerMapper;
+import com.drifter.spring_reactive_mongo_sb.mappers.BeerMapperImpl;
 import com.drifter.spring_reactive_mongo_sb.model.BeerDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,5 +55,13 @@ class BeerServiceImplTest {
                 .quantityOnHand(12)
                 .upc("123123")
                 .build();
+    }
+
+    public static BeerDTO getTestBeerDto() {
+        return new BeerMapperImpl().beerToBeerDto(getTestBeer());
+    }
+
+    public BeerDTO getSavedBeerDto() {
+        return beerService.saveBeer(Mono.just(getTestBeerDto())).block();
     }
 }
